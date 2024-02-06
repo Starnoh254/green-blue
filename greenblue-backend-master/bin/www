@@ -1,0 +1,61 @@
+#!/usr/bin/env node
+
+var app = require("../app");
+var debug = require("debug")("backend:server");
+var http = require("http");
+const mongoose = require("mongoose");
+const { Server } = require("socket.io");
+const { createClient } = require("redis");
+var port = normalizePort(process.env.PORT || "4000");
+app.set("port", port);
+
+var server = http.createServer(app);
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+  return false;
+}
+mongoose
+  .connect(process.env.MONGOOSE_DB_LINK, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(async () => {
+    console.log("MongoDB connected successfully.");
+  });
+let redisClient = createClient({
+  legacyMode: true,
+  url: process.env.REDISCLOUD_URL,
+});
+
+redisClient.connect().catch(console.error);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+io.on("connection", (socket) => {
+  socket.on("clicked", (data) => {
+    console.log(data);
+  });
+});
+app.set("socketio", io);
+var expressServerUtils = require("express-server-utils")(server, port);
+expressServerUtils.listen();
+expressServerUtils.handleOnError();
+expressServerUtils.handleOnListening();
+
+const exitActions = [server.close];
+expressServerUtils.handleShutDown(exitActions);

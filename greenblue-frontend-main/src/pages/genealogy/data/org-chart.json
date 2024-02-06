@@ -1,0 +1,46 @@
+{
+  "name": "Jim Rose (me)",
+  "attributes": {
+    "age": "67"
+  },
+  "children": [
+    {
+      "name": "Nancy Rose",
+      "attributes": {
+        "age": "34"
+      },
+      "children": [
+        {
+          "name": "Nancy Rose",
+          "attributes": {
+            "age": "34"
+          }
+        },
+        {
+          "name": "Heath Rose",
+          "attributes": {
+            "age": "25"
+          }
+        },
+        {
+          "name": "Roger Rose",
+          "attributes": {
+            "age": "21"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Heath Rose",
+      "attributes": {
+        "age": "25"
+      }
+    },
+    {
+      "name": "Roger Rose",
+      "attributes": {
+        "age": "21"
+      }
+    }
+  ]
+}
